@@ -47,18 +47,19 @@ restor_plot <- ggplot(data, aes(x = fct_infreq(restoration), fill = species)) +
   theme_classic() + 
   labs(x = "Restoration Action", y = "Number of Projects") +
   theme(axis.ticks.x = element_blank(),
-        axis.text.x = element_text(size = 10, color = "black"),
-        axis.text.y = element_text(size = 10, color = "black"),
-        axis.title.y = element_text(size = 13),
-        axis.title.x = element_text(size = 13, vjust = -.75),
-        legend.title = element_blank()) + 
+        axis.text.x = element_text(size = 11, color = "black"),
+        axis.text.y = element_text(size = 11, color = "black"),
+        axis.title.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15, vjust = -.75),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 10)) + 
   scale_y_continuous(limit = c(0,25),
                      expand = c(0,0)) #Barplot of number of restoration projects, coloured by species
 restor_plot
 map_restor <- ggarrange(map_plot, restor_plot, labels = c("A", "B"),
                         ncol = 1, nrow = 2) #Combine map plot and restoration plot
 map_restor
-ggexport(map_restor, filename = "figure1.pdf") #Export map_restor as pdf
+ggexport(map_restor, filename = "map_restor.pdf") #Export map_restor as pdf
 
 ###########Meta-Analysis###########
 rm(list = ls()) #Clear working environment
@@ -543,8 +544,8 @@ qqnorm.rma.uni(res_spawning_salmon, envelope = FALSE) #Model validation - normal
 
 Salmon_restoration <- data.frame(species = "Salmon",
                                  restoration = c("Barrier removal", "Channel restoration", 
-                                                 "In-stream structures",
-                                                 "Liming", "Nutrient restoration", 
+                                                 "In-stream structure",
+                                                 "Liming", "Nutrient addition", 
                                                  "Riparian restoration", "Spawning gravel"),
                                  k = c(Barrier_Removal_Salmon[["k"]], 
                                        Channel_Salmon[["k"]],
@@ -681,8 +682,8 @@ qqnorm.rma.uni(res_spawning_trout, envelope = FALSE) #Model validation - normali
 
 Trout_restoration <- data.frame(species = "Trout",
                                 restoration = c("Barrier removal", "Channel restoration", 
-                                                "In-stream structures",
-                                                "Liming", "Nutrient restoration",
+                                                "In-stream structure",
+                                                "Liming", "Nutrient addition",
                                                 "Riparian restoration", "Spawning gravel"),
                                 k = c(Barrier_Removal_Trout[["k"]], 
                                       Channel_Trout[["k"]],
@@ -734,7 +735,7 @@ restor_species_plot <- Salmon_Trout_Effect_Size_Restoration %>%
   ggplot(aes(x = restoration, y = yi, ymin = ci.lb, ymax = ci.ub)) +  
   geom_pointrange(aes(color = species, group = species), 
                   position = position_dodge(width = 0.5),
-                  size = 1) + 
+                  size = .75) + 
   geom_hline(yintercept = 0, linetype = "dashed") +
   theme_classic() +
   scale_y_continuous(expand = c(0,0), limit = c(-3,9),
@@ -742,19 +743,19 @@ restor_species_plot <- Salmon_Trout_Effect_Size_Restoration %>%
   xlab("Restoration Type") +
   ylab("Effect Size (95% CI)") + 
   scale_fill_discrete(labels = c("Atlantic salmon", "Brown trout")) +
-  theme(axis.text.x = element_text(size = 20, color = "black"), 
-        axis.text.y = element_text(size = 15, color = "black"),
-        axis.title.x = element_text(size = 25, vjust = 0),
-        axis.title.y = element_text(size = 25),
+  theme(axis.text.x = element_text(size = 14, color = "black"), 
+        axis.text.y = element_text(size = 13, color = "black"),
+        axis.title.x = element_text(size = 16, vjust = 0),
+        axis.title.y = element_text(size = 16),
         axis.ticks.x = element_blank(),
         legend.title = element_blank(),
-        legend.text = element_text(size = 20),
-        legend.key.size = unit(1, "cm")) +
+        legend.text = element_text(size = 14),
+        legend.key.size = unit(.75, "cm")) +
   scale_x_discrete(labels=c("Barrier removal" = "Barrier\nremoval\n(4,13)", 
                             "Channel restoration" = "Channel\nrestoration\n(2,3)",
-                            "In-stream structures" = "In-stream\nstructures\n(11,27)",
+                            "In-stream structure" = "In-stream\nstructure\n(11,27)",
                             "Liming" = "Liming\n(11,2)",
-                            "Nutrient restoration" = "Nutrient\nrestoration\n(2,0)",
+                            "Nutrient addition" = "Nutrient\naddition\n(2,0)",
                             "Spawning gravel" = "Spawning\ngravel\n(2,15)")) #Plot species-specific responses to restoration type 
 restor_species_plot
 
@@ -1149,9 +1150,9 @@ res_spawning
 
 MA_restoration <- data.frame(restoration = c("Barrier\nremoval\n(17)", 
                                              "Channel\nrestoration\n(5)", 
-                                             "In-stream\nstructures\n(38)",
+                                             "In-stream\nstructure\n(38)",
                                              "Liming\n(13)", 
-                                             "Nutrient\nrestoration\n(2)", 
+                                             "Nutrient\naddition\n(2)", 
                                              "Spawning\ngravel\n(17)"),
                              k = c(Barrier_Removal_random_effect_model[["k"]], 
                                    Channel_random_effect_model[["k"]],
@@ -1197,10 +1198,10 @@ restoration_sub_group <- MA_restoration %>%
                      limit = c(-2,3), expand = c(0,0)) +
   xlab("Restoration Type") +
   ylab("Effect Size (95% CI)") +
-  theme(axis.text.x = element_text(size = 14, color = "black"), 
-        axis.text.y = element_text(color = "black"),
-        axis.title.x = element_text(size = 16, vjust = -0.5),
-        axis.title.y = element_text(size = 16),
+  theme(axis.text.x = element_text(size = 13, color = "black"), 
+        axis.text.y = element_text(size = 11, color = "black"),
+        axis.title.x = element_text(size = 15, vjust = -0.5),
+        axis.title.y = element_text(size = 15),
         axis.ticks.x = element_blank()) #Point range plot of salmonid responses to restoration type
 restoration_sub_group
 
